@@ -1,0 +1,27 @@
+{
+    "development": {
+      "username": "root",
+      "password": "root",
+      "database": "development_db",
+      "host": "127.0.0.1",
+      "dialect": "mysql",
+      "seederStorage": "json"
+    },
+    "test": {
+      "username": "mesale",
+      "password": "root",
+      "database": "test_db",
+      "host": "localhost",
+      "dialect": "mysql",
+      "seederStorage": "json"
+    },
+    "production": {
+      "username": "mesale",
+      "password": "root",
+      "database": "production_db",
+      "host": "localhost",
+      "dialect": "mysql",
+      "seederStorage": "json"
+    }
+  }
+  

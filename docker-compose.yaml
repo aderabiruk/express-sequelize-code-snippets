@@ -1,0 +1,56 @@
+version: "3"
+services: 
+    express_sequelize_snippet_api:
+        build:
+            context: "."
+            dockerfile: "./Dockerfile"
+        ports:
+            - "3000:3000"
+        networks: 
+            - express_sequelize_snippet_network
+        volumes:
+            - express_sequelize_uploads_volume:/app/uploads
+        restart: always
+    prometheus:
+        image: "prom/prometheus:v2.17.1"
+        command:
+            - --config.file=/etc/prometheus/prometheus.yaml
+        ports:
+            - "3001:9090"
+        networks:
+            - express_sequelize_snippet_network
+        volumes:
+            - ./prometheus.yaml:/etc/prometheus/prometheus.yaml:ro
+            - express_sequelize_snippet_prometheus_volume:/prometheus
+        restart: always
+    node_exporter:
+        image: "prom/node-exporter:v0.18.1"
+        networks:
+            - express_sequelize_snippet_network
+        restart: always
+    grafana:
+        image: "grafana/grafana:6.7.1"
+        networks:
+            - express_sequelize_snippet_network
+        depends_on: 
+            - "prometheus"
+        ports:
+            - "3002:3000"
+        volumes:
+            - express_sequelize_snippet_grafana_volume:/var/lib/grafana
+        restart: always
+    dozzle:
+        container_name: dozzle
+        image: amir20/dozzle:latest
+        volumes:
+            - /var/run/docker.sock:/var/run/docker.sock
+        ports:
+            - 3003:3030
+        restart: always
+networks: 
+    express_sequelize_snippet_network:
+        driver: bridge
+volumes:
+    express_sequelize_snippet_grafana_volume: {}
+    express_sequelize_snippet_prometheus_volume: {}
+    express_sequelize_uploads_volume: {}
